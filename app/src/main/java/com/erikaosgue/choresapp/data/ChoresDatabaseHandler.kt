@@ -16,10 +16,13 @@ class ChoresDatabaseHandler(val context: Context): SQLiteOpenHelper(context, DAT
 
     override fun onCreate(db: SQLiteDatabase?) {
         val CREATE_CHORE_TABLE = "CREATE TABLE $TABLE_NAME (" +
-                "$KEY_ID INTEGER_PRIMARY_KEY, " +
-                "$KEY_CHORE_NAME (VARCHAR(256)), $KEY_CHORE_ASSIGNED_BY (VARCHAR(256)), " +
-                "$KEY_CHORE_ASSIGNED_TO (VARCHAR(256)), $KEY_CHORE_ASSIGNED_TIME INTEGER)"
+                "$KEY_ID INTEGER PRIMARY KEY, " +
+                "$KEY_CHORE_NAME TEXT, $KEY_CHORE_ASSIGNED_BY TEXT, " +
+                "$KEY_CHORE_ASSIGNED_TO TEXT, $KEY_CHORE_ASSIGNED_TIME LONG)"
+        Log.d("success", "Enter create: $CREATE_CHORE_TABLE")
         db?.execSQL(CREATE_CHORE_TABLE)
+
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -34,7 +37,8 @@ class ChoresDatabaseHandler(val context: Context): SQLiteOpenHelper(context, DAT
      **/
     fun createChore(chore: Chore) {
 
-        val db = this.writableDatabase
+
+        val db: SQLiteDatabase = this.writableDatabase
 
         // values is an object that will store a set of values (hashMap)
         val values = ContentValues()
@@ -57,18 +61,19 @@ class ChoresDatabaseHandler(val context: Context): SQLiteOpenHelper(context, DAT
             Log.d("DATA INSERTED", "SUCCESS")
         }
 
-//        Log.d("DATA INSERTED", "SUCCESS")
+        Log.d("DATA INSERTED", "SUCCESS")
         db.close()
     }
 
 
-    fun readAChore(id: Int): MutableList<Chore> {
+    fun readChores(): ArrayList<Chore> {
 
-        val list: MutableList<Chore> = ArrayList()
-        val db: SQLiteDatabase = this.readableDatabase
+        val db: SQLiteDatabase = readableDatabase
+        val list: ArrayList<Chore> = ArrayList()
 
-        val query = "Select * from $TABLE_NAME"
+        val query = "SELECT * FROM $TABLE_NAME"
         val result = db.rawQuery(query, null)
+
         if (result.moveToFirst()) {
             do {
                 val chore = Chore()
@@ -78,48 +83,49 @@ class ChoresDatabaseHandler(val context: Context): SQLiteOpenHelper(context, DAT
                 chore.timeAssigned = result.getLong(result.getColumnIndex(KEY_CHORE_ASSIGNED_TIME))
                 list.add(chore)
                 println("***** Chore Name: ${list[0].choreName},\n***** AssignedBy: ${list[0].assignedBy},\n***** AssignedTo: ${list[0].assignedTo}, Time: ${list[0].timeAssigned}")
-            }
-            while (result.moveToNext())
+            } while (result.moveToNext())
         }
         return list
 
-
-
-
-//        val db: SQLiteDatabase = readableDatabase
-
-//        val cursor: Cursor = db.query(
-//                TABLE_NAME,
-//                arrayOf(KEY_ID, KEY_CHORE_NAME, KEY_CHORE_ASSIGNED_BY,
-//                        KEY_CHORE_ASSIGNED_TO, KEY_CHORE_ASSIGNED_TIME),
-//                "$KEY_ID=?",
-//                arrayOf(id.toString()),
-//                null,
-//                null,
-//                null)
-////
-////        if (cursor != null)
-//        if(cursor.moveToFirst()) {
-//            val chore = Chore()
-//            chore.choreName = cursor.getString(cursor.getColumnIndex(KEY_CHORE_NAME))
-//            chore.assignedTo = cursor.getString(cursor.getColumnIndex(KEY_CHORE_ASSIGNED_TO))
-//            chore.assignedBy = cursor.getString(cursor.getColumnIndex(KEY_CHORE_ASSIGNED_BY))
-//            chore.timeAssigned = cursor.getLong(cursor.getColumnIndex(KEY_CHORE_ASSIGNED_TIME))
-////
-//            val dateFormat: DateFormat = DateFormat.getDateInstance()
-//            //Create a Date object
-//            val date = Date(cursor.getLong(cursor.getColumnIndex(KEY_CHORE_ASSIGNED_TIME))).time
-//            var formatDate = dateFormat.format(date)
-//            list.add(chore)
-//
-//        }
-//        else {
-//            println("Didn't enter")
-//        }
-//
-//        return list
-
     }
+
+/*
+        val db: SQLiteDatabase = readableDatabase
+
+        val cursor: Cursor = db.query(
+                TABLE_NAME,
+                arrayOf(KEY_ID, KEY_CHORE_NAME, KEY_CHORE_ASSIGNED_BY,
+                        KEY_CHORE_ASSIGNED_TO, KEY_CHORE_ASSIGNED_TIME),
+                "$KEY_ID=?",
+                arrayOf(id.toString()),
+                null,
+                null,
+                null)
+
+        if (cursor != null)
+
+        if(cursor.moveToFirst()) {
+            val chore = Chore()
+            chore.choreName = cursor.getString(cursor.getColumnIndex(KEY_CHORE_NAME))
+            chore.assignedTo = cursor.getString(cursor.getColumnIndex(KEY_CHORE_ASSIGNED_TO))
+            chore.assignedBy = cursor.getString(cursor.getColumnIndex(KEY_CHORE_ASSIGNED_BY))
+            chore.timeAssigned = cursor.getLong(cursor.getColumnIndex(KEY_CHORE_ASSIGNED_TIME))
+
+            val dateFormat: DateFormat = DateFormat.getDateInstance()
+            //Create a Date object
+            val date = Date(cursor.getLong(cursor.getColumnIndex(KEY_CHORE_ASSIGNED_TIME))).time
+            var formatDate = dateFormat.format(date)
+            list.add(chore)
+
+        }
+        else {
+            println("Didn't enter")
+        }
+
+        return list
+       */
+
+
     fun updateChore(chore: Chore): Int {
         var db: SQLiteDatabase = writableDatabase
         var values = ContentValues()
@@ -131,13 +137,15 @@ class ChoresDatabaseHandler(val context: Context): SQLiteOpenHelper(context, DAT
         values.put(KEY_CHORE_ASSIGNED_TIME, System.currentTimeMillis())
 
         //Update a row
-
         return db.update(TABLE_NAME, values, KEY_ID + "=?", arrayOf(chore.id.toString()))
 
     }
+
+
     fun deleteChore(chore: Chore) {
 
         var db: SQLiteDatabase = writableDatabase
+
         db.delete(TABLE_NAME, KEY_ID + "=?", arrayOf(chore.id.toString()))
         db.close()
     }
