@@ -10,25 +10,13 @@ class Chore() {
     var timeAssigned: Long? = null
     var id: Int? = null
 
-    constructor(choreName: String, assignedBy: String,
-                assignedTo: String, timeAssigned: Long,
-                id: Int): this() {
-
-
-        this.choreName = choreName
-        this.assignedBy = assignedBy
-        this.assignedTo = assignedTo
-        this.timeAssigned = timeAssigned
-        this.id = id
-    }
-
 
     fun showHumanDate(timeAssigned: Long): String {
 
-        var dateFormat: java.text.DateFormat = DateFormat.getDateInstance()
-        var formattedDate: String = dateFormat.format(Date(timeAssigned).time)
+        val dateFormat: DateFormat = DateFormat.getDateInstance()
+        val formattedDate: String = dateFormat.format(Date(timeAssigned).time)
 
-        return "Created: $formattedDate"
+        return "Created:\n$formattedDate"
 
     }
 
