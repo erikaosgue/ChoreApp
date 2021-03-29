@@ -27,11 +27,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
         android:ems="10"
-        android:hint="@string/assingTo"
+        android:hint="@string/assignTo"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enterChoreId" />
+        app:layout_constraintTop_toBottomOf="@+id/enterChoreId"/>
 
     <EditText
         android:id="@+id/assignedById"
