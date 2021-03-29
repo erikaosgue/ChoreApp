@@ -5,16 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.erikaosgue.choresapp.data.ChoreListAdapter
 import com.erikaosgue.choresapp.data.ChoresDatabaseHandler
-import com.erikaosgue.choresapp.databinding.ActivityChoreListBinding
 import com.erikaosgue.choresapp.databinding.ActivityMainBinding
 import com.erikaosgue.choresapp.model.Chore
-//import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +28,10 @@ class MainActivity : AppCompatActivity() {
 
 		// Create an instance of our Class ChoresDatabaseHandler()
 		dbHandler = ChoresDatabaseHandler(this)
+
+
+		// Check if the data base contains at least one table when run the app, it opens right away
+		checkDB()
 
 		/*
 		 Check if there is data in the editText  and add that data
@@ -69,6 +67,12 @@ class MainActivity : AppCompatActivity() {
 		}
 
     }
+	private fun checkDB(){
+		if (dbHandler!!.getChoreCount() > 0) {
+			startActivity(Intent(this, ChoreListActivity::class.java))
+		}
+	}
+
 	private fun saveToDB(chore: Chore) {
 		dbHandler?.createChore(chore)
 	}
