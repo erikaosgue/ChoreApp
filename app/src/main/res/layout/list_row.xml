@@ -6,10 +6,9 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/darker_gray"
-    android:paddingTop="15dp"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
-    android:paddingBottom="4.5dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
     >
 
 
@@ -17,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -26,12 +25,12 @@
         app:layout_constraintRight_toRightOf="parent">
 
         <RelativeLayout
-            android:padding="10dp"
+            android:padding="0.1dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
-                android:layout_marginRight="20dp"
+                android:layout_margin="10dp"
                 android:id="@+id/imageViewID"
                 android:contentDescription="@string/app_name"
                 android:layout_width="wrap_content"
@@ -39,60 +38,69 @@
                 app:srcCompat="@android:drawable/sym_def_app_icon"/>
 
             <TextView
-                android:layout_marginTop="5dp"
                 android:id="@+id/listChoreName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/imageViewID"
                 android:layout_alignTop="@id/imageViewID"
-                android:text="Chore Name"
-                android:textSize="16dp"
-                android:textStyle="bold" />
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="149dp"
+                android:layout_toEndOf="@id/imageViewID"
+                android:text="@string/chore_name"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:ignore="RelativeOverlap" />
 
             <TextView
                 android:id="@+id/listAssignedBy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/imageViewID"
+                android:layout_toEndOf="@id/imageViewID"
                 android:layout_below="@id/listChoreName"
-                android:text="AssigndBy" />
+                android:text="@string/assignedBy" />
 <!--            android:layout_toRightOf="@id/imageViewID"-->
 
             <TextView
                 android:id="@+id/listAssignedTo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/imageViewID"
+                android:layout_toEndOf="@id/imageViewID"
                 android:layout_below="@id/listAssignedBy"
-                android:text="AssignedTo:"
+                android:text="@string/assignTo"
                 android:textStyle="italic" />
 
             <TextView
                 android:id="@+id/listDate"
+                android:layout_margin="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/imageViewID"
-                android:layout_alignParentRight="true"
-                android:text="date: 12 April 2017" />
+                android:layout_alignParentEnd="true"
+                android:layout_alignBaseline="@id/listAssignedBy"
+                android:text="@string/date_created"
+                tools:ignore="RelativeOverlap" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@id/listDate"
+                android:layout_margin="10dp"
+                >
 
-            <Button
-                android:id="@+id/listEditButton"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@android:drawable/ic_menu_edit"
-                android:elevation="11dp"
-                android:layout_alignBottom="@id/listChoreName"
-                android:layout_alignLeft="@id/listDate"/>
 
-            <Button
-                android:id="@+id/listDeleteButton"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginLeft="30dp"
-                android:layout_alignBottom="@id/listChoreName"
-                android:layout_alignLeft="@id/listEditButton"
-                android:background="@android:drawable/ic_delete"
-                />
+                <Button
+                    android:id="@+id/listEditButton"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@android:drawable/ic_menu_edit" />
+
+                <Button
+                    android:id="@+id/listDeleteButton"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@android:drawable/ic_delete" />
+
+            </LinearLayout>
+
+
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
