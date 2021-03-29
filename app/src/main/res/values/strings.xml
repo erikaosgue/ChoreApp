@@ -4,4 +4,6 @@
     <string name="assingTo">Assing to ...</string>
     <string name="assignedBy">Assigned by ...</string>
     <string name="saveChore">Save Chore</string>
+    <string name="image_description">Icon of a Chore</string>
+    <string name="menu_title">Add a chore</string>
 </resources>

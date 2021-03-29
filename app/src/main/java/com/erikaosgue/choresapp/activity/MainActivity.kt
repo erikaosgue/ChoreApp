@@ -1,7 +1,5 @@
 package com.erikaosgue.choresapp.activity
 
-import android.animation.ObjectAnimator
-import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,17 +7,25 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.erikaosgue.choresapp.data.ChoreListAdapter
 import com.erikaosgue.choresapp.data.ChoresDatabaseHandler
+import com.erikaosgue.choresapp.databinding.ActivityChoreListBinding
 import com.erikaosgue.choresapp.databinding.ActivityMainBinding
 import com.erikaosgue.choresapp.model.Chore
-import kotlinx.android.synthetic.main.activity_main.*
+//import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
 	// Create an var Of our type class ChoresDatabaseHandler
-	var dbHandler: ChoresDatabaseHandler? = null
+	private var dbHandler: ChoresDatabaseHandler? = null
+
 
 	lateinit var  activityMainBinding: ActivityMainBinding
+
+	//Setting the Layout activity_chore_list
+
  	override fun onCreate(savedInstanceState: Bundle?) {
  		super.onCreate(savedInstanceState)
  		activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -29,60 +35,43 @@ class MainActivity : AppCompatActivity() {
 		// Create an instance of our Class ChoresDatabaseHandler()
 		dbHandler = ChoresDatabaseHandler(this)
 
-		saveChore.setOnClickListener {
+		/*
+		 Check if there is data in the editText  and add that data
+		 when clicking in the Button saveChore
+		 */
+		activityMainBinding.saveChore.setOnClickListener {
 
-			progressBarId.visibility = View.VISIBLE
+			// Make visible the progress bar
+			activityMainBinding.progressBarId.visibility = View.VISIBLE
 
-			if(!TextUtils.isEmpty(enterChoreId.text.toString())
-					&& !TextUtils.isEmpty(assignedById.text.toString())
-					&& !TextUtils.isEmpty(assignToId.text.toString())) {
-				Toast.makeText(this, "Please enter a chore", Toast.LENGTH_SHORT).show()
+			// Check if EditText field are not empty
+			if(!TextUtils.isEmpty(activityMainBinding.enterChoreId.text.toString())
+					&& !TextUtils.isEmpty(activityMainBinding.assignedById.text.toString())
+					&& !TextUtils.isEmpty(activityMainBinding.assignToId.text.toString())) {
+				Toast.makeText(this, "Success... entering data", Toast.LENGTH_SHORT).show()
 
-				// Save to dataBase
-
-				var chore = Chore()
-				chore.choreName = enterChoreId.text.toString()
-				chore.assignedTo = assignedById.text.toString()
-				chore.assignedBy = assignToId.text.toString()
-
+				// Create a chore Object and save it into the dataBase
+				val chore = Chore()
+				chore.choreName = activityMainBinding.enterChoreId.text.toString()
+				chore.assignedTo = activityMainBinding.assignedById.text.toString()
+				chore.assignedBy = activityMainBinding.assignToId.text.toString()
 				saveToDB(chore)
+
+
 				Toast.makeText(this, "Getting to a new activity", Toast.LENGTH_LONG).show()
-				progressBarId.visibility = View.GONE
+						activityMainBinding.progressBarId.visibility = View.GONE
 				startActivity(Intent(this, ChoreListActivity::class.java))
 
 			}else {
-				Toast.makeText(this, "Please enter a chore", Toast.LENGTH_SHORT).show()
+				Toast.makeText(this, "Empty fields not allowed", Toast.LENGTH_SHORT).show()
 			}
 
 		}
 
-
-
-
-
-
-/*
-		 Create an Instance of type Chore()
-		val chore = Chore()
-		chore.choreName = "Clean Room"
-		chore.assignedTo = "James"
-		chore.assignedBy = "Carlos"
-
-		dbHandler?.createChore(chore)
-
-		var chores: ArrayList<Chore> = dbHandler?.readChores()
-
-		//Read from database
-		val list = dbHandler.readChores()
-		if (list.isNotEmpty()) {
-			Log.d("Item", list.toString())
-			println("Chore Name: ${list[0].choreName}, AssignedBy: ${list[0].assignedBy}, AssignedTo: ${list[0].assignedTo}, Time: ${list[0].timeAssigned}")
-		}
-
-*/
     }
-	fun saveToDB(chore: Chore) {
+	private fun saveToDB(chore: Chore) {
 		dbHandler?.createChore(chore)
 	}
+
 
 }

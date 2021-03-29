@@ -89,42 +89,6 @@ class ChoresDatabaseHandler(val context: Context): SQLiteOpenHelper(context, DAT
 
     }
 
-/*
-        val db: SQLiteDatabase = readableDatabase
-
-        val cursor: Cursor = db.query(
-                TABLE_NAME,
-                arrayOf(KEY_ID, KEY_CHORE_NAME, KEY_CHORE_ASSIGNED_BY,
-                        KEY_CHORE_ASSIGNED_TO, KEY_CHORE_ASSIGNED_TIME),
-                "$KEY_ID=?",
-                arrayOf(id.toString()),
-                null,
-                null,
-                null)
-
-        if (cursor != null)
-
-        if(cursor.moveToFirst()) {
-            val chore = Chore()
-            chore.choreName = cursor.getString(cursor.getColumnIndex(KEY_CHORE_NAME))
-            chore.assignedTo = cursor.getString(cursor.getColumnIndex(KEY_CHORE_ASSIGNED_TO))
-            chore.assignedBy = cursor.getString(cursor.getColumnIndex(KEY_CHORE_ASSIGNED_BY))
-            chore.timeAssigned = cursor.getLong(cursor.getColumnIndex(KEY_CHORE_ASSIGNED_TIME))
-
-            val dateFormat: DateFormat = DateFormat.getDateInstance()
-            //Create a Date object
-            val date = Date(cursor.getLong(cursor.getColumnIndex(KEY_CHORE_ASSIGNED_TIME))).time
-            var formatDate = dateFormat.format(date)
-            list.add(chore)
-
-        }
-        else {
-            println("Didn't enter")
-        }
-
-        return list
-       */
-
 
     fun updateChore(chore: Chore): Int {
         var db: SQLiteDatabase = writableDatabase
