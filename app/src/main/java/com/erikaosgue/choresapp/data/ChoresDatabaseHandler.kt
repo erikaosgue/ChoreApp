@@ -1,20 +1,16 @@
 package com.erikaosgue.choresapp.data
 
-import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import android.widget.Toast
 import com.erikaosgue.choresapp.model.*
-import java.text.DateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 class ChoresDatabaseHandler(private val context: Context):
-        SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+    SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase?) {
 
@@ -24,19 +20,7 @@ class ChoresDatabaseHandler(private val context: Context):
                 "$KEY_CHORE_NAME TEXT, $KEY_CHORE_ASSIGNED_BY TEXT, " +
                 "$KEY_CHORE_ASSIGNED_TO TEXT, $KEY_CHORE_ASSIGNED_TIME LONG)"
 
-        Toast.makeText(context, "Creating for the first time the table", Toast.LENGTH_LONG).show()
-
-
-
-        Log.d("success", "Creating for the first time the table: $CREATE_CHORE_TABLE")
-
-        Toast.makeText(context, "database: [$db]", Toast.LENGTH_LONG).show()
-        println("databaseIs Open?: [${db?.isOpen}]")
-
         db?.execSQL(CREATE_CHORE_TABLE)
-        Toast.makeText(context, "database: [$db]", Toast.LENGTH_LONG).show()
-
-
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -112,7 +96,6 @@ class ChoresDatabaseHandler(private val context: Context):
 
     }
 
-
     fun updateChore(chore: Chore): Int {
         val db: SQLiteDatabase = writableDatabase
         val values = ContentValues()
@@ -125,7 +108,6 @@ class ChoresDatabaseHandler(private val context: Context):
 
         //Update a row
         return db.update(TABLE_NAME, values, "$KEY_ID=?", arrayOf(chore.id.toString()))
-
     }
 
 
@@ -136,12 +118,12 @@ class ChoresDatabaseHandler(private val context: Context):
         db.delete(TABLE_NAME, "$KEY_ID=?", arrayOf(id.toString()))
         db.close()
     }
+
     fun getChoreCount(): Int {
         val db: SQLiteDatabase = readableDatabase
         val countQuery = "SELECT * FROM $TABLE_NAME"
         val cursor = db.rawQuery(countQuery, null)
 
         return cursor.count
-
     }
 }
