@@ -50,32 +50,35 @@ class ChoreListActivity : AppCompatActivity() {
 
     }
 
+    // This method is call everytime the ChoreListActivity runs
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         //Inflating the top_menu.xml into an object
         menuInflater.inflate(R.menu.top_menu, menu)
+        Log.d("onCreateOptionsMenu", "createOptionsMenu")
         return true
     }
 
+    // This method is call only when the user clicks the button plus sign
+    // to add a new chore
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.add_menu_button) {
-            Log.d("Item Clicked", "Item clicked")
+            Log.d("onOptionsItemSelected", "Item clicked")
 
             createPopupDialog()
         }
         return super.onOptionsItemSelected(item)
     }
 
-    fun createPopupDialog(){
+    // This method is call from the method onOptionsItemSelected
+    private fun createPopupDialog(){
 
-        var view = layoutInflater.inflate(R.layout.popup, null)
-        var choreName = view.findViewById<TextView>(R.id.popEnterChoreId)
-        var assignedBy = view.findViewById<TextView>(R.id.popEnterAssignedById)
-        var assignedTo = view.findViewById<TextView>(R.id.popEnterAssignToId)
-        var saveButton  = view.findViewById<Button>(R.id.popSaveChoreButton)
-        Log.d("Here yes", "Success")
-        println("******* ${choreName.text}, ${assignedBy.text}, ${assignedTo.text} ******")
+        val popupview = layoutInflater.inflate(R.layout.popup, null)
+        val choreName = popupview.findViewById<TextView>(R.id.popEnterChoreId)
+        val assignedBy = popupview.findViewById<TextView>(R.id.popEnterAssignedById)
+        val assignedTo = popupview.findViewById<TextView>(R.id.popEnterAssignToId)
+        val saveButton  = popupview.findViewById<Button>(R.id.popSaveChoreButton)
 
-        dialogBuilder = AlertDialog.Builder(this).setView(view)
+        dialogBuilder = AlertDialog.Builder(this).setView(popupview)
         dialog = dialogBuilder?.create()
         dialog?.show()
 
@@ -100,6 +103,7 @@ class ChoreListActivity : AppCompatActivity() {
                 dialog!!.dismiss()
 
                 startActivity(Intent(this, ChoreListActivity::class.java))
+                // Close the current Activity to avoid Stacking multiples activities
                 finish()
 
             }
