@@ -13,7 +13,8 @@ import java.text.DateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ChoresDatabaseHandler(private val context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class ChoresDatabaseHandler(private val context: Context):
+        SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase?) {
 
@@ -23,10 +24,17 @@ class ChoresDatabaseHandler(private val context: Context): SQLiteOpenHelper(cont
                 "$KEY_CHORE_NAME TEXT, $KEY_CHORE_ASSIGNED_BY TEXT, " +
                 "$KEY_CHORE_ASSIGNED_TO TEXT, $KEY_CHORE_ASSIGNED_TIME LONG)"
 
+        Toast.makeText(context, "Creating for the first time the table", Toast.LENGTH_LONG).show()
 
-        Log.d("success", "Enter create: $CREATE_CHORE_TABLE")
+
+
+        Log.d("success", "Creating for the first time the table: $CREATE_CHORE_TABLE")
+
+        Toast.makeText(context, "database: [$db]", Toast.LENGTH_LONG).show()
+        println("databaseIs Open?: [${db?.isOpen}]")
 
         db?.execSQL(CREATE_CHORE_TABLE)
+        Toast.makeText(context, "database: [$db]", Toast.LENGTH_LONG).show()
 
 
     }
@@ -46,7 +54,7 @@ class ChoresDatabaseHandler(private val context: Context): SQLiteOpenHelper(cont
      **/
     fun createChore(chore: Chore) {
 
-        val db: SQLiteDatabase = this.writableDatabase
+        val db: SQLiteDatabase = writableDatabase
 
         // values is an object that will store a set of values (hashMap)
         val values = ContentValues()
@@ -61,9 +69,12 @@ class ChoresDatabaseHandler(private val context: Context): SQLiteOpenHelper(cont
         // Inserting  to the db the Table name, column hack=null and the Values
         val result = db.insert(TABLE_NAME, null, values)
 
-        if (result == (0).toLong()) {
+        //Check if the Data was correctly inserted
+        //result will be the Id of the last row inserted,
+        // if an error happened, it will be -1
+        if (result == (-1).toLong()) {
 
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Failed Data not Inserted", Toast.LENGTH_SHORT).show()
             Log.d("DATA NOT INSERTED", "FAIL")
         }
         else {
@@ -71,8 +82,6 @@ class ChoresDatabaseHandler(private val context: Context): SQLiteOpenHelper(cont
             Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
             Log.d("DATA INSERTED", "SUCCESS")
         }
-
-
         db.close()
     }
 
@@ -83,19 +92,21 @@ class ChoresDatabaseHandler(private val context: Context): SQLiteOpenHelper(cont
         val list: ArrayList<Chore> = ArrayList()
 
         val query = "SELECT * FROM $TABLE_NAME"
-        val result = db.rawQuery(query, null)
+        //
+        val cursor = db.rawQuery(query, null)
 
-        if (result.moveToFirst()) {
+        // If cursor is not empty will return true and move to the first entry
+        if (cursor.moveToFirst()) {
             do {
                 val chore = Chore()
 
-                chore.id = result.getInt(result.getColumnIndex(KEY_ID))
-                chore.choreName = result.getString(result.getColumnIndex(KEY_CHORE_NAME))
-                chore.assignedTo = result.getString(result.getColumnIndex(KEY_CHORE_ASSIGNED_TO))
-                chore.assignedBy = result.getString(result.getColumnIndex(KEY_CHORE_ASSIGNED_BY))
-                chore.timeAssigned = result.getLong(result.getColumnIndex(KEY_CHORE_ASSIGNED_TIME))
+                chore.id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
+                chore.choreName = cursor.getString(cursor.getColumnIndex(KEY_CHORE_NAME))
+                chore.assignedTo = cursor.getString(cursor.getColumnIndex(KEY_CHORE_ASSIGNED_TO))
+                chore.assignedBy = cursor.getString(cursor.getColumnIndex(KEY_CHORE_ASSIGNED_BY))
+                chore.timeAssigned = cursor.getLong(cursor.getColumnIndex(KEY_CHORE_ASSIGNED_TIME))
                 list.add(chore)
-            } while (result.moveToNext())
+            } while (cursor.moveToNext())
         }
         return list
 
