@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 		dbHandler = ChoresDatabaseHandler(this)
 
 
+
 		// Check if the data base contains at least one table when run the app, it opens right away
 		checkDB()
 
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 		 */
 		activityMainBinding.saveChore.setOnClickListener {
 
-			// Make visible the progress bar
+			// Make visible the progress bar when clicking the button saveChore
 			activityMainBinding.progressBarId.visibility = View.VISIBLE
 
 			// Check if EditText field are not empty
@@ -57,7 +58,9 @@ class MainActivity : AppCompatActivity() {
 
 
 				Toast.makeText(this, "Getting to a new activity", Toast.LENGTH_LONG).show()
-						activityMainBinding.progressBarId.visibility = View.GONE
+
+				// Make the progress bar Gone when loading to the new activity
+				activityMainBinding.progressBarId.visibility = View.GONE
 				startActivity(Intent(this, ChoreListActivity::class.java))
 
 			}else {
