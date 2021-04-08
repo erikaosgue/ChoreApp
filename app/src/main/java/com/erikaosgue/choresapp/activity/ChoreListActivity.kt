@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.erikaosgue.choresapp.R
 import com.erikaosgue.choresapp.data.ChoreListAdapter
 import com.erikaosgue.choresapp.data.ChoresDatabaseHandler
+import com.erikaosgue.choresapp.data.mDataBaseHandlerObject
 import com.erikaosgue.choresapp.databinding.ActivityChoreListBinding
 import com.erikaosgue.choresapp.model.Chore
 
@@ -35,7 +36,11 @@ class ChoreListActivity : AppCompatActivity() {
         setContentView(activityChoreListBinding.root)
 
 
-        dbHandler = ChoresDatabaseHandler(this)
+        // Instantiating the class ChoresDataBAseHandler
+        //dbHandler = ChoresDatabaseHandler(this)
+
+        //Using the Object delcaration
+        dbHandler = mDataBaseHandlerObject.create(this)
 
         // Get the Recycler View
         recyclerView =  activityChoreListBinding.recyclerViewId
@@ -50,7 +55,7 @@ class ChoreListActivity : AppCompatActivity() {
 
     }
 
-    // This method is call everytime the ChoreListActivity runs
+    // This method is call every time the ChoreListActivity runs
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         //Inflating the top_menu.xml into an object
         menuInflater.inflate(R.menu.top_menu, menu)

@@ -15,25 +15,26 @@ class MainActivity : AppCompatActivity() {
 	// Create an var Of our type class ChoresDatabaseHandler
 	private var dbHandler: ChoresDatabaseHandler? = null
 
-
 	lateinit var  activityMainBinding: ActivityMainBinding
-
-	//Setting the Layout activity_chore_list
-
  	override fun onCreate(savedInstanceState: Bundle?) {
  		super.onCreate(savedInstanceState)
  		activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
  		setContentView(activityMainBinding.root)
 
-
 		// Create an instance of our Class ChoresDatabaseHandler()
 		dbHandler = ChoresDatabaseHandler(this)
 
-
-
-		// Check if the data base contains at least one table when run the app, it opens right away
+		// Check if the data base contains at least one table when running
+		// the app, it opens right away
 		checkDB()
 
+		// Register the saveChoreButton, and checks if all fields are full
+		setUpUI()
+
+  }
+
+
+	private fun setUpUI(){
 		/*
 		 Check if there is data in the editText  and add that data
 		 when clicking in the Button saveChore
@@ -47,38 +48,46 @@ class MainActivity : AppCompatActivity() {
 			if(!TextUtils.isEmpty(activityMainBinding.enterChoreId.text.toString())
 					&& !TextUtils.isEmpty(activityMainBinding.assignedById.text.toString())
 					&& !TextUtils.isEmpty(activityMainBinding.assignToId.text.toString())) {
-				Toast.makeText(this, "Success... entering data", Toast.LENGTH_SHORT).show()
 
-				// Create a chore Object and save it into the dataBase
-				val chore = Chore()
-				chore.choreName = activityMainBinding.enterChoreId.text.toString()
-				chore.assignedTo = activityMainBinding.assignedById.text.toString()
-				chore.assignedBy = activityMainBinding.assignToId.text.toString()
-				saveToDB(chore)
+						Toast.makeText(this, "Success... entering data", Toast.LENGTH_SHORT).show()
 
-
-				Toast.makeText(this, "Getting to a new activity", Toast.LENGTH_LONG).show()
-
-				// Make the progress bar Gone when loading to the new activity
-				activityMainBinding.progressBarId.visibility = View.GONE
-				startActivity(Intent(this, ChoreListActivity::class.java))
+						// Create a chore Object and save it into the dataBase
+						createChore()
 
 			}else {
 				Toast.makeText(this, "Empty fields not allowed", Toast.LENGTH_SHORT).show()
 			}
-
 		}
 
-    }
+	}
+
+
+	private fun createChore() {
+
+		val chore = Chore()
+		chore.choreName = activityMainBinding.enterChoreId.text.toString()
+		chore.assignedTo = activityMainBinding.assignedById.text.toString()
+		chore.assignedBy = activityMainBinding.assignToId.text.toString()
+		saveToDB(chore)
+
+		Toast.makeText(this, "Getting to a new activity", Toast.LENGTH_LONG).show()
+
+		// Make the progress bar Gone when loading to the new activity
+		activityMainBinding.progressBarId.visibility = View.GONE
+		startActivity(Intent(this, ChoreListActivity::class.java))
+	}
+
+	private fun saveToDB(chore: Chore) {
+		dbHandler?.createChore(chore)
+	}
+
 	private fun checkDB(){
 		if (dbHandler!!.getChoreCount() > 0) {
 			startActivity(Intent(this, ChoreListActivity::class.java))
 		}
 	}
 
-	private fun saveToDB(chore: Chore) {
-		dbHandler?.createChore(chore)
-	}
+
 
 
 }

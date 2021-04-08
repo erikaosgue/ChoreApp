@@ -9,6 +9,11 @@ import android.widget.Toast
 import com.erikaosgue.choresapp.model.*
 import kotlin.collections.ArrayList
 
+object mDataBaseHandlerObject {
+    fun create(context: Context) = ChoresDatabaseHandler(context)
+}
+
+
 class ChoresDatabaseHandler(private val context: Context):
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
